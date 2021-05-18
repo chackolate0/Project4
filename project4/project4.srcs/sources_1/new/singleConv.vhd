@@ -18,23 +18,12 @@ end singleConv;
 
 architecture Behavioral of singleConv is
 
-	signal mac    : signed(31 downto 0) := x"00000000"; --signed signal to pass to output
-	signal start0 : STD_LOGIC;
+	signal mac : signed(31 downto 0) := x"00000000"; --signed signal to pass to output
+	-- signal start0 : STD_LOGIC;
 	-- signal done0  : STD_LOGIC := '1'; --done signal
-	signal C0     : signed(31 downto 0);
+	-- signal C0     : signed(31 downto 0);
 
 begin
-
-	-- C0 <= (signed(A(0, 0)) * signed(B(0, 0))) + (signed(A(0, 1)) * signed(B(0, 1))) + (signed(A(0, 2)) * signed(B(0, 2))) + (signed(A(1, 0)) * signed(B(1, 0))) + (signed(A(1, 1)) * signed(B(1, 1))) + (signed(A(1, 2)) * signed(B(1, 2))) + (signed(A(2, 0)) * signed(B(2, 0))) + (signed(A(2, 1)) * signed(B(2, 1))) + (signed(A(2, 2)) * signed(B(2, 2)));
-
-	-- result : process
-	-- begin
-	-- 	if (rising_edge(start)) then
-	-- 		done0 <= '0';
-	-- 		C     <= STD_LOGIC_VECTOR(C0);
-	-- 	end if;
-	-- end process;
-	-- done <= done0;
 	--this process loops through the C0 matrix and adds the elements into a single value
 	convolute : process (clk, start)
 		variable mac0 : signed(31 downto 0) := x"00000000"; --accumulator variable
@@ -43,7 +32,6 @@ begin
 		if (rising_edge(clk)) then
 			if (reset = '1') then
 				mac0 := x"00000000";
-				mac <= mac0;
 			elsif (start = '1' and cnt /= 9) then --convolute 3x3 every rising edge as long as operation is not done
 				-- done0 <= '0';
 				mac0 := x"00000000";
@@ -53,12 +41,14 @@ begin
 						cnt  := cnt + 1;
 					end loop;
 				end loop;
-				mac <= mac0;
+				-- mac <= mac0;
 			elsif (cnt = 9) then
-				C     <= STD_LOGIC_VECTOR(signed(mac0));
-				-- done0 <= '1';
 				cnt := 0;
 			end if;
 		end if;
+		mac <= mac0;
 	end process;
+
+	C <= STD_LOGIC_VECTOR(mac);
+
 end Behavioral;

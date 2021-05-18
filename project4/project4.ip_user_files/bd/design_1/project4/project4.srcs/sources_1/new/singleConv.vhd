@@ -18,49 +18,38 @@ end singleConv;
 
 architecture Behavioral of singleConv is
 
-	signal mac    : signed(31 downto 0) := x"00000000"; --signed signal to pass to output
-	signal start0 : STD_LOGIC;
-	signal done0  : STD_LOGIC := '1'; --done signal
-	signal C0     : signed(31 downto 0);
+	signal mac   : signed(31 downto 0) := x"00000000"; --signed signal to pass to output
+	signal done0 : STD_LOGIC           := '1';         --done signal
 
 begin
 
-	-- C0 <= (signed(A(0, 0)) * signed(B(0, 0))) + (signed(A(0, 1)) * signed(B(0, 1))) + (signed(A(0, 2)) * signed(B(0, 2))) + (signed(A(1, 0)) * signed(B(1, 0))) + (signed(A(1, 1)) * signed(B(1, 1))) + (signed(A(1, 2)) * signed(B(1, 2))) + (signed(A(2, 0)) * signed(B(2, 0))) + (signed(A(2, 1)) * signed(B(2, 1))) + (signed(A(2, 2)) * signed(B(2, 2)));
-
-	-- result : process
-	-- begin
-	-- 	if (rising_edge(start)) then
-	-- 		done0 <= '0';
-	-- 		C     <= STD_LOGIC_VECTOR(C0);
-	-- 	end if;
-	-- end process;
-	-- done <= done0;
+	done <= done0;
 	--this process loops through the C0 matrix and adds the elements into a single value
 	convolute : process (clk, start)
 		variable mac0 : signed(31 downto 0) := x"00000000"; --accumulator variable
-		variable cnt  : INTEGER             := 0;
 	begin
+		if (rising_edge(start)) then --turning on start will deactivate done
+			done0 <= '0';
+		end if;
 		if (rising_edge(clk)) then
 			if (reset = '1') then
 				mac0 := x"00000000";
 				mac <= mac0;
-			elsif (start = '1' and cnt /= 9) then --convolute 3x3 every rising edge as long as operation is not done
-				done0 <= '0';
+			elsif (done0 = '0') then --convolute 3x3 every rising edge as long as operation is not done
 				mac0 := x"00000000";
 				for I in 0 to 2 loop
 					for J in 0 to 2 loop
 						mac0 := signed(A(I, J)) * signed(B(I, J)) + mac0;
-						cnt  := cnt + 1;
 					end loop;
 				end loop;
-				mac <= mac0;
-			elsif (cnt = 9) then
-				C <= STD_LOGIC_VECTOR(signed(mac0));
 				done0 <= '1';
-				cnt := 0;
+				mac   <= mac0;
+			elsif (done0 = '1') then
+				mac <= mac0;
 			end if;
 		end if;
 	end process;
 
+	C <= STD_LOGIC_VECTOR(mac);
 
 end Behavioral;

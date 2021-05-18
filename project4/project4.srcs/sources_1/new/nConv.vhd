@@ -27,13 +27,13 @@ architecture Behavioral of nConv is
 			clk   : in STD_LOGIC;
 			start : in STD_LOGIC;
 			reset : in STD_LOGIC;
-			done  : out STD_LOGIC;
+			-- done  : out STD_LOGIC;
 			C     : out STD_LOGIC_VECTOR (31 downto 0)); --each single convolution produces a 32 bit output
 	end component;
 
-	signal done0 : bitMatrix(0 to n - 3, 0 to n - 3);
-	signal Cout  : result(0 to n - 3, 0 to n - 3); --buffer matrix holds combinational result, Cout is only updated when done
-	signal cnt   : INTEGER := 0;
+	-- signal done0 : bitMatrix(0 to n - 3, 0 to n - 3);
+	signal Cout : result(0 to n - 3, 0 to n - 3); --buffer matrix holds combinational result, Cout is only updated when done
+	signal cnt  : INTEGER := 0;
 	-- signal done1 : bitMatrix(0 to n - 3, 0 to n - 3) := (others => (others => '1'));
 
 begin
@@ -54,7 +54,7 @@ begin
 				clk     => clk,
 				start   => start,
 				reset   => reset,
-				done    => done0(I, J),
+				-- done    => done0(I, J),
 				C       => Cout(I, J)
 			);
 		end generate CONV0;
@@ -66,8 +66,8 @@ begin
 	-- 	if()
 	-- end process;
 
-	done <= done0(0, 0);
-	C    <= Cout;
+	-- done <= done0(0, 0);
+	C <= Cout;
 
 	-- done <= done0;
 

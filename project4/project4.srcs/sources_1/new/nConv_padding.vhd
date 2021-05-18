@@ -13,7 +13,7 @@ entity nConv_padding is
 		clk   : in STD_LOGIC;
 		reset : in STD_LOGIC;
 		start : in STD_LOGIC;
-		done  : out STD_LOGIC;
+		-- done  : out STD_LOGIC;
 		C     : out result(0 to n - 1, 0 to n - 1)); --n*n*32bits output
 end nConv_padding;
 
@@ -38,13 +38,13 @@ architecture Behavioral of nConv_padding is
 			clk   : in STD_LOGIC;
 			reset : in STD_LOGIC;
 			start : in STD_LOGIC;
-			done  : out STD_LOGIC;
+			-- done  : out STD_LOGIC;
 			C     : out result(0 to n - 3, 0 to n - 3)); --n*n*32bits output
 	end component;
 
-	signal Cbuf  : result(0 to n - 1, 0 to n - 1) := (others => (others => x"00000000"));
-	signal done0 : STD_LOGIC;
-	signal A0    : matrix(0 to n + 1, 0 to n + 1); --output of padder block
+	signal Cbuf : result(0 to n - 1, 0 to n - 1) := (others => (others => x"00000000"));
+	-- signal done0 : STD_LOGIC;
+	signal A0   : matrix(0 to n + 1, 0 to n + 1); --output of padder block
 
 begin
 
@@ -66,12 +66,12 @@ begin
 		clk   => clk,
 		reset => reset,
 		start => start,
-		done  => done0,
+		-- done  => done0,
 		C     => Cbuf
 	);
 
-	C    <= Cbuf;
-	done <= done0;
+	C <= Cbuf;
+	-- done <= done0;
 
 	-- done : process (done0)
 	-- if

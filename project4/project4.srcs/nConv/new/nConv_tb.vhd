@@ -19,7 +19,7 @@ architecture Behavioral of nConv_tb is
       clk   : in STD_LOGIC;
       reset : in STD_LOGIC;
       start : in STD_LOGIC;
-      done  : out STD_LOGIC;
+      -- done  : out STD_LOGIC;
       C     : out result(0 to n - 3, 0 to n - 3)); --n*n*32bits output
   end component;
 
@@ -34,7 +34,7 @@ architecture Behavioral of nConv_tb is
       clk   : in STD_LOGIC;
       reset : in STD_LOGIC;
       start : in STD_LOGIC;
-      done  : out STD_LOGIC;
+      -- done  : out STD_LOGIC;
       C     : out result(0 to n - 1, 0 to n - 1)); --n*n*32bits output
   end component;
 
@@ -42,7 +42,7 @@ architecture Behavioral of nConv_tb is
   signal C                 : result (0 to 17, 0 to 17);
   signal clk, reset, start : STD_LOGIC := '0';
   signal B                 : matrix(0 to 2, 0 to 2);
-  signal done              : STD_LOGIC;
+  -- signal done              : STD_LOGIC;
 
   constant clk_period      : TIME := 10ns;
 
@@ -73,7 +73,7 @@ begin
     clk   => clk,
     reset => reset,
     start => start,
-    done  => done,
+    -- done  => done,
     C     => C
   );
 
